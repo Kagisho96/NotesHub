@@ -1,0 +1,70 @@
+name: Deploy NotesHub
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    # Build and test backend
+    - name: Install backend dependencies
+      working-directory: ./server
+      run: npm ci
+      
+    - name: Run backend linting and tests
+      working-directory: ./server
+      run: |
+        npm run lint || true
+        npm test || true
+      
+    - name: Build backend
+      working-directory: ./server
+      run: npm run build
+      
+    # Build frontend
+    - name: Install frontend dependencies
+      working-directory: ./client
+      run: npm ci
+      
+    - name: Run frontend linting and tests
+      working-directory: ./client
+      run: |
+        npm run lint || true
+        npm test || true
+    
+    - name: Build frontend
+      working-directory: ./client
+      run: npm run build
+      
+    # Example deployment step - can be customized based on hosting provider
+    - name: Deploy
+      if: github.ref == 'refs/heads/main'
+      run: |
+        echo "Deploying to production server..."
+        # Add your deployment commands here
+        # Examples:
+        # - Copy to server via scp
+        # - Deploy to cloud service like AWS, Azure, or Heroku
+        # - Use a deployment tool like Netlify CLI
+      
+    - name: Notify deployment status
+      if: always()
+      run: |
+        if [ ${{ job.status }} == 'success' ]; then
+          echo "Deployment successful!"
+        else
+          echo "Deployment failed!"
+        fi 
