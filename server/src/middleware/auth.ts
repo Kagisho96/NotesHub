@@ -27,6 +27,8 @@ export const authenticate = async (
       return res.status(401).json({ message: 'No token, authorization denied' });
     }
     
+    console.log(authHeader)
+
     const token = authHeader.split(' ')[1];
     
     // Verify token
