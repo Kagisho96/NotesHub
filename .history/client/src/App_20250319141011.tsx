@@ -1,6 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./pages/Dashboard";
-import DevLoginPage from "./pages/DevLoginPage";
 import LoginPage from "./pages/LoginPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
@@ -52,9 +51,6 @@ function App() {
         <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
         <Route path="/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
-        
-        {/* Dev login route */}
-        <Route path="/dev-login" element={<DevLoginPage />} />
         
         {/* Default route */}
         <Route path="*" element={<Navigate to="/dashboard" />} />
