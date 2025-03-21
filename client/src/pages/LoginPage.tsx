@@ -24,14 +24,19 @@ const LoginPage = () => {
       return;
     }
     
-    setIsSubmitting(true);
-    
     try {
+      setIsSubmitting(true);
+      
+      console.log('Attempting login with:', email);
       await login(email, password);
+      
+      // If successful, will redirect to dashboard
+      console.log('Login successful');
       toast.success('Login successful');
       navigate(from, { replace: true });
-    } catch (err) {
-      // Error handling is done in the store
+    } catch (error: any) {
+      console.error('Login error details:', error);
+      toast.error(error.message || 'Login failed');
     } finally {
       setIsSubmitting(false);
     }
