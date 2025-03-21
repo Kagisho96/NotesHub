@@ -19,7 +19,7 @@ export const prisma = new PrismaClient();
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // CORS configuration
 app.use(cors({
