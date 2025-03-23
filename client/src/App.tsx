@@ -1,13 +1,17 @@
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./pages/Dashboard";
 import DevLoginPage from "./pages/DevLoginPage";
+import LecturesPage from "./pages/LecturesPage";
 import LoginPage from "./pages/LoginPage";
+import NotesPage from "./pages/NotesPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
+import TasksPage from "./pages/TasksPage";
 import useAuthStore from "./store/authStore";
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { DarkModeProvider } from "./contexts/DarkModeContext";
 
 // Auth components
 
@@ -40,7 +44,7 @@ function App() {
   }
 
   return (
-    <>
+    <DarkModeProvider>
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         {/* Public routes */}
@@ -49,9 +53,9 @@ function App() {
         
         {/* Protected routes */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
-        <Route path="/tasks" element={<ProtectedRoute><Tasks /></ProtectedRoute>} />
-        <Route path="/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
+        <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
+        <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
+        <Route path="/lectures" element={<ProtectedRoute><LecturesPage /></ProtectedRoute>} />
         
         {/* Dev login route */}
         <Route path="/dev-login" element={<DevLoginPage />} />
@@ -59,7 +63,7 @@ function App() {
         {/* Default route */}
         <Route path="*" element={<Navigate to="/dashboard" />} />
       </Routes>
-    </>
+    </DarkModeProvider>
   );
 }
 
