@@ -1,5 +1,6 @@
 import useAuthStore from "../../store/authStore";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../contexts/DarkModeContext";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -9,6 +10,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { darkMode, toggleDarkMode } = useDarkMode();
   
   const handleLogout = () => {
     logout();
@@ -16,12 +18,12 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <aside className="w-64 bg-primary-700 text-white shadow-lg z-10">
-        <div className="p-4">
-          <h1 className="text-xl font-bold">NotesHub</h1>
-          <p className="text-sm text-primary-100 mt-1">Student Portal</p>
+    <div className={`min-h-screen flex ${darkMode ? 'dark bg-gray-900' : 'bg-gray-100'}`}>
+      {/* Sidebar with enhanced shadow */}
+      <aside className={`w-64 ${darkMode ? 'bg-gray-800 text-white' : 'bg-primary-700 text-white'} shadow-2xl fixed h-full z-30 border-r ${darkMode ? 'border-gray-700' : 'border-primary-800'}`}>
+        <div className="p-4 border-b border-opacity-20 border-white">
+          <h1 className="text-xl font-bold text-white">NotesHub</h1>
+          <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-primary-100'} mt-1`}>Student Portal</p>
         </div>
         
         <nav className="mt-8">
@@ -31,8 +33,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 to="/dashboard"
                 className={`block px-4 py-2 w-full text-left transition ${
                   location.pathname === '/dashboard'
-                    ? 'bg-primary-600 font-medium'
-                    : 'hover:bg-primary-600'
+
                 }`}
               >
                 Dashboard
@@ -43,8 +44,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 to="/notes"
                 className={`block px-4 py-2 w-full text-left transition ${
                   location.pathname.startsWith('/notes')
-                    ? 'bg-primary-600 font-medium'
-                    : 'hover:bg-primary-600'
+                    ? darkMode ? 'bg-gray-700 font-medium text-white' : 'bg-primary-600 font-medium text-white'
+                    : darkMode ? 'hover:bg-gray-700 text-gray-200' : 'hover:bg-primary-600 text-white'
                 }`}
               >
                 Notes
@@ -55,8 +56,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 to="/tasks"
                 className={`block px-4 py-2 w-full text-left transition ${
                   location.pathname.startsWith('/tasks')
-                    ? 'bg-primary-600 font-medium'
-                    : 'hover:bg-primary-600'
+                    ? darkMode ? 'bg-gray-700 font-medium text-white' : 'bg-primary-600 font-medium text-white'
+                    : darkMode ? 'hover:bg-gray-700 text-gray-200' : 'hover:bg-primary-600 text-white'
                 }`}
               >
                 Tasks
@@ -67,8 +68,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 to="/lectures"
                 className={`block px-4 py-2 w-full text-left transition ${
                   location.pathname.startsWith('/lectures')
-                    ? 'bg-primary-600 font-medium'
-                    : 'hover:bg-primary-600'
+                    ? darkMode ? 'bg-gray-700 font-medium text-white' : 'bg-primary-600 font-medium text-white'
+                    : darkMode ? 'hover:bg-gray-700 text-gray-200' : 'hover:bg-primary-600 text-white'
                 }`}
               >
                 Lecture Recordings
@@ -77,31 +78,35 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </ul>
         </nav>
         
-        <div className="absolute bottom-0 w-64 p-4">
+        <div className="absolute bottom-0 w-64 p-4 border-t border-opacity-20 border-white">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full bg-primary-300 flex items-center justify-center text-primary-800 font-semibold">
+            <div className={`w-10 h-10 rounded-full ${darkMode ? 'bg-gray-600 text-white' : 'bg-primary-300 text-primary-800'} flex items-center justify-center font-semibold shadow-md`}>
               {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
             <div className="text-sm">
-              <p className="font-medium">{user?.name || 'User'}</p>
-              <p className="text-primary-200 text-xs">{user?.email || 'user@example.com'}</p>
+              <p className="font-medium text-white">{user?.name || 'User'}</p>
+              <p className={`${darkMode ? 'text-gray-400' : 'text-primary-200'} text-xs`}>{user?.email || 'user@example.com'}</p>
             </div>
           </div>
          
           <button
             onClick={handleLogout}
-            className="w-full text-center py-2 rounded-md bg-primary-600 hover:bg-primary-500 transition"
+            className={`w-full text-center py-2 rounded-md transition text-white shadow-md ${
+              darkMode
+                ? 'bg-gray-700 hover:bg-gray-600'
+                : 'bg-primary-600 hover:bg-primary-500'
+            }`}
           >
             Sign Out
           </button>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 bg-gray-50">
-        <header className="bg-white shadow-sm h-16 flex items-center px-6 sticky top-0 z-10">
+      {/* Main Content with padding for sidebar */}
+      <main className={`flex-1 ${darkMode ? 'bg-gray-800' : 'bg-gray-100'} ml-64`}>
+        <header className={`${darkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} shadow-lg h-16 flex items-center px-6 sticky top-0 z-20`}>
           <div className="flex justify-between items-center w-full">
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-lg font-semibold text-high-contrast">
               {location.pathname === '/dashboard' && 'Dashboard'}
               {location.pathname.startsWith('/notes') && 'Notes'}
               {location.pathname.startsWith('/tasks') && 'Tasks'}
@@ -109,8 +114,25 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
             </h2>
             
             <div className="flex items-center gap-4">
+              {/* Dark mode toggle button */}
               <button
-                className="text-gray-500 hover:text-gray-700"
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-md shadow-sm ${darkMode ? 'text-yellow-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-200'}`}
+                aria-label="Toggle dark mode"
+              >
+                {darkMode ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                  </svg>
+                )}
+              </button>
+              
+              <button
+                className={`${darkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'} font-medium shadow-sm px-3 py-1 rounded border ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}
               >
                 Help
               </button>
@@ -118,7 +140,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           </div>
         </header>
         
-        <div className="p-6">
+        <div className={`p-6 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
           {children}
         </div>
       </main>
