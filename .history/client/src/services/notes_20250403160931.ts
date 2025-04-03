@@ -95,42 +95,6 @@ const notesService = {
     } catch (error) {
       throw error;
     }
-  },
-
-  likeNote: async (id: string): Promise<Note> => {
-    try {
-      const response = await api.post<{ note: Note }>(`/notes/${id}/like`);
-      return response.data.note;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  dislikeNote: async (id: string): Promise<Note> => {
-    try {
-      const response = await api.post<{ note: Note }>(`/notes/${id}/dislike`);
-      return response.data.note;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  addComment: async (id: string, text: string): Promise<Comment> => {
-    try {
-      const response = await api.post<{ comment: Comment }>(`/notes/${id}/comments`, { text });
-      return response.data.comment;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  getComments: async (id: string): Promise<Comment[]> => {
-    try {
-      const response = await api.get<{ comments: Comment[] }>(`/notes/${id}/comments`);
-      return response.data.comments;
-    } catch (error) {
-      throw error;
-    }
   }
 };
 

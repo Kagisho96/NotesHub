@@ -57,14 +57,7 @@ const useNotesStore = create<NotesState>((set, get) => ({
     try {
       set({ isLoading: true, error: null });
       const note = await notesService.getNoteById(id);
-      const initializedNote = {
-        ...note,
-        likes: note.likes || 0,
-        dislikes: note.dislikes || 0,
-        userReaction: note.userReaction || null,
-        comments: note.comments || []
-      };
-      set({ currentNote: initializedNote, isLoading: false });
+      set({ currentNote: note, isLoading: false });
     } catch (error: any) {
       set({ 
         error: error.response?.data?.message || 'Failed to fetch note',

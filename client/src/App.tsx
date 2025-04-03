@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import DevLoginPage from "./pages/DevLoginPage";
 import LecturesPage from "./pages/LecturesPage";
 import LoginPage from "./pages/LoginPage";
+import NoteDetailPage from "./pages/NoteDetailPage";
 import NotesPage from "./pages/NotesPage";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import RegisterPage from "./pages/RegisterPage";
@@ -54,6 +55,7 @@ function App() {
         {/* Protected routes */}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
+        <Route path="/notes/:id" element={<ProtectedRoute><NoteDetailPage /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
         <Route path="/lectures" element={<ProtectedRoute><LecturesPage /></ProtectedRoute>} />
         

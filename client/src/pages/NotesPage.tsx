@@ -1,13 +1,14 @@
 import useNotesStore from "../store/notesStore";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDarkMode } from "../contexts/DarkModeContext";
 
 const NotesPage = () => {
-  const { notes, fetchNotes, loading, error } = useNotesStore();
+  const { notes, fetchNotes, isLoading, error } = useNotesStore();
   const { darkMode } = useDarkMode();
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchNotes();
@@ -24,6 +25,10 @@ const NotesPage = () => {
     note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     note.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleNoteClick = (id: string) => {
+    navigate(`/notes/${id}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -56,7 +61,7 @@ const NotesPage = () => {
       </div>
 
       {/* Notes Grid */}
-      {loading ? (
+      {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
         </div>
@@ -65,7 +70,8 @@ const NotesPage = () => {
           {filteredNotes.map((note) => (
             <div 
               key={note.id} 
-              className={`${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'} rounded-lg shadow-md hover:shadow-lg transition-shadow card-hover`}
+              className={`${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'} rounded-lg shadow-md hover:shadow-lg transition-shadow card-hover cursor-pointer`}
+              onClick={() => handleNoteClick(note.id)}
             >
               <div className="p-6">
                 <h3 className="font-bold text-lg mb-2 truncate text-high-contrast">{note.title}</h3>
@@ -77,12 +83,15 @@ const NotesPage = () => {
                   <span>
                     Last updated: {new Date(note.updatedAt).toLocaleDateString()}
                   </span>
-                  <Link
-                    to={`/notes/${note.id}`}
+                  <span 
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent triggering parent's onClick
+                      handleNoteClick(note.id);
+                    }}
                     className={`${darkMode ? 'text-blue-400 hover:text-blue-300' : 'text-primary-600 hover:text-primary-800'}`}
                   >
                     View →
-                  </Link>
+                  </span>
                 </div>
               </div>
             </div>
